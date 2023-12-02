@@ -1,12 +1,10 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-public class Main {
+public class Day1 {
 
     public static void main(String[] args) {
-//        day1A();
+        day1A();
         day1B();
     }
 
