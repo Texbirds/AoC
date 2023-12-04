@@ -2,9 +2,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Day3 {
+
+    public static int MAP_SIZE = 200;
 
     public static void main(String[] args) {
         Day3A();
@@ -37,21 +38,22 @@ public class Day3 {
         characters.put("/", 9);
         characters.put("@" , 10);
 
-        int[] map = new int[150 * 150];
+        int[] map = new int[MAP_SIZE * MAP_SIZE];
 
-        int val = 0;
-        int x = 0;
-        int y = 0;
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\kwint\\IdeaProjects\\AoC2023\\src\\inputs\\day3.txt"));
+            int val = 0;
+            int x = 0;
+            int y = 0;
 
-        List<Position> list = new ArrayList<>();
-        Position np = null;
+            List<Position> list = new ArrayList<>();
+            Position np = null;
 
-        Arrays.fill(map, 0);
+            Arrays.fill(map, 0);
 
-        // text.split("\n")
-        //reader.lines().collect(Collectors.toList())
-        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\kwint\\IdeaProjects\\AoC2023\\src\\inputs\\day3.txt"))) {
-            for (String line : reader.lines().collect(Collectors.toList())) {
+            // text.split("\n")
+            // reader.lines().collect(Collectors.toList())
+            for (String line : text.split("\n")) {
                 for (String c : line.split("")) {
                     if (Character.isDigit(c.charAt(0))) {
                         if (np == null) {
@@ -64,9 +66,9 @@ public class Day3 {
                         }
                         np = null;
                     }
-                    
+
                     if (characters.containsKey(c)) {
-                        map[y * 150 + x] = characters.get(c);
+                        map[y * MAP_SIZE + x] = characters.get(c);
                     } else if (!c.equals(".") && !Character.isDigit(c.charAt(0))) {
                         System.out.println(c);
                     }
@@ -77,26 +79,30 @@ public class Day3 {
             }
 
             for (Position np2 : list) {
-                if (np2.isAdjacent(map)) {
-                    val += np2.getNumber();
-                }
+                np2.findGears(map);
             }
 
-            printMap(map);
-            System.out.println(val);
-            System.out.println(list);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+            for (int i = 0; i < list.size(); i++) {
+                for (int j = i + 1; j < list.size(); j++) {
+                    val += list.get(i).getGear(list.get(j));
+                }
+
+            }
+                printMap(map);
+                System.out.println(val / 2);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
     }
 
     private static void printMap(int[] map) {
-        for(int y = 0; y < 150; y++) {
-            for (int x = 0; x < 150; x++) {
-                if (map[y * 150 + x] == 0) {
+        for(int y = 0; y < MAP_SIZE; y++) {
+            for (int x = 0; x < MAP_SIZE; x++) {
+                if (map[y * MAP_SIZE + x] == 0) {
                     System.out.print(".");
                 } else {
-                    System.out.print(map[y * 150 + x]);
+                    System.out.print(map[y * MAP_SIZE + x]);
                 }
             }
             System.out.println();
